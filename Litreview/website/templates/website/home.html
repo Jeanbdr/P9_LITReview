@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
     <p>Vous êtes connecté !</p>
+    {% for ticket in tickets %}
+        <p>{{ ticket.title }}</p>
+        <p>{{ ticket.description }}</p>
+        <img src="{{ ticket.image.url }}">
+    {% endfor %}
 {% endblock content %}

@@ -90,16 +90,17 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        "OPTIONS": {"min_length": 4},
     },
     {
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
+    {
+        "NAME": "authentication.validators.ContainsLetterValidator",
+    },
+    {
+        "NAME": "authentication.validators.ContainsNumberValidator",
     },
 ]
 
@@ -129,3 +130,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "authentication.User"
 
 LOGIN_URL = "login"
+
+MEDIA_URL = "/media/"
+
+MEDIA_ROOT = BASE_DIR.joinpath("media/")
