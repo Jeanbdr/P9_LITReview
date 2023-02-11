@@ -28,6 +28,7 @@ urlpatterns = [
     path("signup/", authentication.views.signup_page, name="signup"),
     path("create_ticket/", website.views.create_ticket, name="create_ticket"),
     path("create_review/", website.views.create_review, name="create_review"),
+    path("followers/", website.views.follow_users, name="followers"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

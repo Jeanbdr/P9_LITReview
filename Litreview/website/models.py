@@ -1,15 +1,29 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
 from django.db import models
+from PIL import Image
 
 
 class Ticket(models.Model):
     title = models.CharField(max_length=128)
     description = models.CharField(max_length=1500)
-    image = models.ImageField(verbose_name="image")
+    image = models.ImageField(null=True)
+    uploader = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True
+    )
+    IMAGE_MAX_SIZE = (200, 287)
 
     def __str__(self):
         return f"{self.title}"
+
+    def resize_image(self):
+        image = Image.open(self.image)
+        image.thumbnail(self.IMAGE_MAX_SIZE)
+        image.save(self.image.path)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.resize_image()
 
 
 class Review(models.Model):

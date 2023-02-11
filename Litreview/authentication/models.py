@@ -5,6 +5,4 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    pass
-    # email = None
-    # username = models.CharField(unique=True, max_length=30)
+    follows = models.ManyToManyField("self", symmetrical=False)

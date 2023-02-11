@@ -1,12 +1,16 @@
 <html>
     <head>
         <title>LITReview</title>
+        <h1>LITReview</h1>
+        {% if user.is_authenticated %}
+            {{ request.user }}
+            <a href=""><button>Profil</button></a>
+            <a href="{% url 'followers' %}"><button>Abonnements</button></a>
+            <a href="{% url 'logout' %}"><button>Déconnexion</button></a>
+        {% endif %}
     </head>
     <body>
-        <h1>LITReview</h1>
         {% block content %}{% endblock content %}
-        {% if user.is_authenticated %}
-            <p> {{ request.user }} <a href="{% url 'logout' %}"> Se déconnecter</a></p>
-        {% endif %}
+        
     </body>
 </html>

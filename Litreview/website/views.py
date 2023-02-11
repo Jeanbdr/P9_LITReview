@@ -41,7 +41,7 @@ def create_own_review(request):
     if request.method == "POST":
         ticket_form = forms.TicketForm(request.POST, request.FILES)
         review_form = forms.ReviewForm(request.POST)
-        if all([ticket_form.is_valid(), review_form.is_valid()]):
+        if all([ticket_form.is_valid(), review_form.is_valid()]):  # mettre un and
             ticket = ticket_form.save(commit=False)
             ticket.uploader = request.user
             ticket.save()
@@ -52,3 +52,14 @@ def create_own_review(request):
         "review_form": review_form,
     }
     return render(request, "URL", context=context)
+
+
+@login_required
+def follow_users(request):
+    form = forms.FollowUsersForm(instance=request.user)
+    if request.method == "POST":
+        form = forms.FollowUsersForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect("home")
+    return render(request, "website/followers.html", context={"form": form})
