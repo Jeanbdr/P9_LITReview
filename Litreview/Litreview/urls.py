@@ -20,6 +20,7 @@ import website.views
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", authentication.views.login_page, name="login"),
@@ -27,8 +28,14 @@ urlpatterns = [
     path("home/", website.views.home, name="home"),
     path("signup/", authentication.views.signup_page, name="signup"),
     path("create_ticket/", website.views.create_ticket, name="create_ticket"),
-    path("create_review/", website.views.create_review, name="create_review"),
+    path("update/<str:pk>", website.views.update_ticket, name="update_ticket"),
+    path("delete/<str:pk>", website.views.delete_ticket, name="delete_ticket"),
+    path("update_review/<str:pk>", website.views.update_review, name="update_review"),
+    path("delete_review/<str:pk>", website.views.delete_review, name="delete_review"),
+    path("reviewing/", website.views.create_review, name="reviewing"),
     path("followers/", website.views.follow_users, name="followers"),
+    path("profile/<int:pk>", website.views.profile, name="profile"),
+    path("create_review/", website.views.create_own_review, name="create_review"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

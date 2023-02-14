@@ -14,6 +14,8 @@ def logout_user(request):
 def login_page(request):
     form = forms.LoginForm()
     message = ""
+    if request.user.is_authenticated:
+        return redirect("home")
     if request.method == "POST":
         form = forms.LoginForm(request.POST)
         if form.is_valid():

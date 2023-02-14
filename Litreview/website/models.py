@@ -6,12 +6,13 @@ from PIL import Image
 
 class Ticket(models.Model):
     title = models.CharField(max_length=128)
-    description = models.CharField(max_length=1500)
-    image = models.ImageField(null=True)
-    uploader = models.ForeignKey(
+    description = models.CharField(max_length=2048, blank=True)
+    image = models.ImageField(null=True, blank=True)
+    user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True
     )
     IMAGE_MAX_SIZE = (200, 287)
+    time_created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return f"{self.title}"
@@ -28,14 +29,14 @@ class Ticket(models.Model):
 
 class Review(models.Model):
     ticket = models.ForeignKey(to=Ticket, on_delete=models.CASCADE)
+    headline = models.CharField(max_length=128)
     rating = models.PositiveSmallIntegerField(
         # validates that rating must be between 0 and 5
-        validators=[MinValueValidator(0), MaxValueValidator(5)]
+        validators=[MinValueValidator(0), MaxValueValidator(5)],
     )
-    headline = models.CharField(max_length=128)
     body = models.CharField(max_length=8192, blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    time_created = models.DateTimeField(auto_now_add=True)
+    time_created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return f"{self.headline}"

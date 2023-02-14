@@ -1,12 +1,13 @@
 <html>
     <head>
         <title>LITReview</title>
-        <h1>LITReview</h1>
+        <h2>LITReview</h2>
         {% if user.is_authenticated %}
-            {{ request.user }}
-            <a href=""><button>Profil</button></a>
+            <a href="{% url 'home' %}"><button>Accueil</button></a>
+            <a href="{% url 'profile' request.user.id %}"><button>Profil</button></a>
             <a href="{% url 'followers' %}"><button>Abonnements</button></a>
             <a href="{% url 'logout' %}"><button>Déconnexion</button></a>
+            {{ request.user }}
         {% endif %}
     </head>
     <body>

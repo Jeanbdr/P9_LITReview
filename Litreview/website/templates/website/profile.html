@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if profile %}
+    <h2> Profil</h2>
+    {% for ticket in tickets %}
+        <p>{{ ticket.user.username }}</p>
+        <p>{{ ticket.title }}</p>
+        <p>{{ ticket.description }}</p>
+        <img src="{{ ticket.image.url }}">
+        <a href="{% url 'update_ticket' ticket.id %}"><button>Update</button></a>
+        <a href="{% url 'delete_ticket' ticket.id %}"><button>Delete</button></a>
+    {% endfor %}
+    {% for review in reviews %}
+        <p>{{ review.headline }}</p>
+        <p>Note : {{ review.rating }}</p>
+        <p>{{ review.body }}</p>
+        <p>Critique faite par : {{ review.user.username }} le {{ review.time_created }}</p>
+        <a href="{% url 'update_review' review.id %}"><button>Update</button></a>
+        <a href="{% url 'delete_review' review.id %}"><button>Delete</button></a>
+    {% endfor %}
+{% endif %}
+{% endblock content %}
