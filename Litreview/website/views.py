@@ -4,11 +4,12 @@ from . import forms, models
 from django.db.models import Q
 from authentication.models import User
 from website.models import Ticket, Review
+from django.views.generic import ListView
 
 # Create your views here.
 @login_required
 def home(request):
-    tickets = models.Ticket.objects.filter(Q(user__in=request.user.follows.all()))
+    tickets = models.Ticket.objects.filter(Q(user__in=request.user.following.all()))
     return render(request, "website/home.html", context={"tickets": tickets})
 
 
@@ -32,21 +33,21 @@ def create_ticket(request):
         form = forms.TicketForm(request.POST, request.FILES)
         if form.is_valid():
             ticket = form.save(commit=False)
-            # set the uploader to the user before saving the model
             ticket.user = request.user
-            # now we can save
             ticket.save()
             return redirect("home")
     return render(request, "website/create_ticket.html", context={"form": form})
 
 
 @login_required
-def create_review(request):
-    form = forms.ReviewForm()
+def create_review(request, pk):
+    form = forms.ReviewForm(ticket_id=pk)
     if request.method == "POST":
-        form = forms.ReviewForm(request.POST)
+        form = forms.ReviewForm(request.POST, ticket_id=pk)
         if form.is_valid():
-            form.save()
+            review = form.save(commit=False)
+            review.user = request.user
+            review.save()
             return redirect("home")
     return render(request, "website/reviewing.html", context={"form": form})
 
@@ -73,13 +74,26 @@ def create_own_review(request):
 
 @login_required
 def follow_users(request):
-    form = forms.FollowUsersForm(instance=request.user)
-    if request.method == "POST":
-        form = forms.FollowUsersForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect("home")
-    return render(request, "website/followers.html", context={"form": form})
+    current_user = request.user
+    if request.method == "GET":
+        search_query = request.GET.get("search_box")
+        print(f"resultat de la searchbox {search_query} methode GET")
+        if search_query == "":
+            search_query = "None"
+            print("on est la")
+            if request.method == "POST":
+                action = request.POST["follow"]
+                print(" on est laaaaaaa")
+                if action == "follow":
+                    request.user.following.add(search_query)
+                elif action == "unfollow":
+                    request.user.following.remove(search_query)
+        result = User.objects.filter(username=search_query)
+    return render(
+        request,
+        "website/followers.html",
+        {"search_query": search_query, "result": result},
+    )
 
 
 @login_required

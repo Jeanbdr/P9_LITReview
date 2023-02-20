@@ -12,7 +12,14 @@ class TicketForm(forms.ModelForm):
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ["ticket", "rating", "headline", "body", "user"]
+        fields = ["ticket", "rating", "headline", "body"]
+
+    def __init__(self, *args, **kwargs):
+        self.ticket_id = kwargs.pop("ticket_id", None)
+        super().__init__(*args, **kwargs)
+        if self.ticket_id is not None:
+            self.initial["ticket"] = self.ticket_id
+            self.fields["ticket"].disabled = True
 
 
 User = get_user_model()
@@ -21,4 +28,4 @@ User = get_user_model()
 class FollowUsersForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ["follows"]
+        fields = ["following"]

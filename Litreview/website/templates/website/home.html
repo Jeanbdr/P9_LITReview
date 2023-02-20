@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-    <p><a href="http://127.0.0.1:8000/create_ticket/"> <button>Demander une critique</button></a></p>
-    <p><a href="http://127.0.0.1:8000/create_review/"><button>Créer une critique</button></a></p>
+    <p><a href="{% url 'create_ticket' %}"> <button>Demander une critique</button></a></p>
+    <p><a href="{% url 'create_review' %}"><button>Créer une critique</button></a></p>
     {% for ticket in tickets %}
         <p>{{ ticket.user }} à demandé une critique</p>
         <p>{{ ticket.title }}</p>
         <p>{{ ticket.description }}</p>
         <img src="{{ ticket.image.url }}">
-        <a href="http://127.0.0.1:8000/reviewing/"><button>Créer une critique</button></a>
+        <a href=" http://127.0.0.1:8000/reviewing/{{ticket.id}}"><button>Créer une critique</button></a>
     {% endfor %}
 {% endblock content %}

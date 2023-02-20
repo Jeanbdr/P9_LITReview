@@ -1,9 +1,38 @@
 {% extends 'base.html' %}
 {% block content %}
     <h2>Suivre les utilisateurs</h2>
-    <form method="post">
-        {{ form.as_p }}
-        {% csrf_token %}
-        <button type="submit">Confirmer</button>
+    <!-- PARTIE RECHERCHE ET RESULTAT-->
+    <form method="GET">
+        <input type="text" id="search_box" name="search_box" placeholder="Search..." value="{{ request.GET.username }}">
+        <input type="submit" value="Search">
     </form>
+    <!-- PARTIE FOLLOW -->
+    {% if search_query %}
+        <h3>Résultat de la recherche</h3>
+        {% for user in result %}
+            <form method="POST">
+                {% csrf_token %}
+                {{user.username}} <button class="btn btn-outline-success" name="follow" value="follow" type="submit">S'abonner</button>
+            </form>
+        {% endfor %}
+    {%endif%}<br/><br/>
+    <!-- PARTIE ABONNEMENT POUR SE DESABONNER -->
+    <strong>Abonnements</strong><br/>
+    {% for following in user.following.all %}
+        <form method="POST">
+            {% csrf_token %}
+            {% if user in user.following.all %}
+                {{ following}}
+                <button class="btn btn-outline-danger" name="follow" value="unfollow" type="submit">
+                    Se désabonner<br/>
+                </button>
+            {%endif%}
+        </form>
+    {% endfor %}
+    <br/>
+    <!-- AFFICHAGE DES ABONNÉS -->
+    <strong>Abonnés</strong><br/>
+    {% for following in user.followed_by.all %}
+        @{{following}}<br/>
+    {% endfor %}
 {% endblock content %}
