@@ -34,7 +34,7 @@ urlpatterns = [
     path("update_review/<str:pk>", website.views.update_review, name="update_review"),
     path("delete_review/<str:pk>", website.views.delete_review, name="delete_review"),
     path("reviewing/<str:pk>", website.views.create_review, name="reviewing"),
-    path("follower/", website.views.follow_users, name="followers"),
+    path("followers/", website.views.follow_users, name="followers"),
     path("profile/<int:pk>", website.views.profile, name="profile"),
     path("create_review/", website.views.create_own_review, name="create_review"),
 ]

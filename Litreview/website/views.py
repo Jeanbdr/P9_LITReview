@@ -5,6 +5,7 @@ from django.db.models import Q
 from authentication.models import User
 from website.models import Ticket, Review
 from django.views.generic import ListView
+from django.contrib import messages
 
 # Create your views here.
 @login_required
@@ -77,22 +78,19 @@ def follow_users(request):
     current_user = request.user
     if request.method == "GET":
         search_query = request.GET.get("search_box")
-        print(f"resultat de la searchbox {search_query} methode GET")
-        if search_query == "":
-            search_query = "None"
-            print("on est la")
-            if request.method == "POST":
-                action = request.POST["follow"]
-                print(" on est laaaaaaa")
-                if action == "follow":
-                    request.user.following.add(search_query)
-                elif action == "unfollow":
-                    request.user.following.remove(search_query)
-        result = User.objects.filter(username=search_query)
+        searched_user = User.objects.filter(username=search_query)
+        if request.method == "POST":
+            action = request.POST["follow"]
+            if action == "follow":
+                print("on est la")
+                current_user.following.add(searched_user)
+            elif action == "unfollow":
+                current_user.following.remove(searched_user)
+
     return render(
         request,
         "website/followers.html",
-        {"search_query": search_query, "result": result},
+        {"search_query": search_query, "result": searched_user},
     )
 
 
