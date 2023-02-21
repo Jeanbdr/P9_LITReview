@@ -80,9 +80,9 @@ def follow_users(request):
                 current_user.following.add(searched_user[0]["id"])
         else:
             user = request.POST.get("follow")
-            jesus = User.objects.filter(username=user).values()
-            if user.__eq__(jesus):
-                current_user.following.remove(jesus[0]["id"])
+            result = User.objects.filter(username=user).values()
+            if user.__eq__(result):
+                current_user.following.remove(result[0]["id"])
         context = {"searched_query": search_query, "searched_user": searched_user}
         return render(request, "website/follower.html", context)
     return render(request, "website/follower.html")
