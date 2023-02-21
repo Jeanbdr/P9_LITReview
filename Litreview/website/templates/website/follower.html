@@ -11,7 +11,7 @@
         <strong>Abonnements</strong><br/><br/>
         {% for following in user.following.all %}
             {{ following.username }}
-            <button class="btn btn-outline-danger" name="follow" value="unfollow" type="submit">Se désabonner</button><br/><br/>
+            <button class="btn btn-outline-danger" name="follow" value="{{following.username}}" type="submit">Se désabonner</button><br/><br/>
         {% endfor %}
     </form>
     <br/>
