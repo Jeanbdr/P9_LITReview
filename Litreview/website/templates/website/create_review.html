@@ -2,7 +2,6 @@
 {% block content %}
     <h2> Créer un ticket </h2>
     <form method="post">
-        {{ ticket_form.as_p }}
         {{ review_form.as_p }}
         {% csrf_token %}
         <button type="submit"> Envoyer</button>

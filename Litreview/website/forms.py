@@ -1,5 +1,5 @@
 from django import forms
-from website.models import Ticket, Review
+from website.models import Ticket, Review, OwnReview
 from django.contrib.auth import get_user_model
 
 
@@ -29,3 +29,9 @@ class FollowUsersForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ["following"]
+
+
+class OwnReviewForm(forms.ModelForm):
+    class Meta:
+        model = OwnReview
+        fields = ["title", "description", "image", "rating", "headline", "body"]

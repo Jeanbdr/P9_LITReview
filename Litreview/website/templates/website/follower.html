@@ -5,16 +5,13 @@
     <form method="POST">
         {% csrf_token %}
         <input type="text" id="search_box" name="search_box" placeholder="Search..." value="{{ request.GET.username }}">
-        <button class="btn btn-outline-success" name="follow" value="follow" type="submit">S'abonner</button>
-    </form>
-
+        <button class="btn btn-outline-success" name="follow" value="follow" type="submit">S'abonner</button><br/><br/>
+    
     <!-- PARTIE ABONNEMENT POUR SE DESABONNER -->
-    <strong>Abonnements</strong><br/>
-    <form method="POST">
-        {% csrf_token %}
+        <strong>Abonnements</strong><br/>
         {% for following in user.following.all %}
             {{ following.username }}
-            <button class="btn btn-outline-danger" name="follow" value="unfollow" type="submit">Se désabonner</button>
+            <button class="btn btn-outline-danger" name="follow" value="unfollow" type="submit">Se désabonner</button><br/><br/>
         {% endfor %}
     </form>
     <br/>

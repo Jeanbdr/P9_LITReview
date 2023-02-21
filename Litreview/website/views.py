@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from . import forms, models
 from django.db.models import Q
 from authentication.models import User
-from website.models import Ticket, Review
+from website.models import Ticket, Review, OwnReview
 from django.views.generic import ListView
 from django.contrib import messages
 
@@ -53,6 +53,7 @@ def create_review(request, pk):
     return render(request, "website/reviewing.html", context={"form": form})
 
 
+"""
 @login_required
 def create_own_review(request):
     ticket_form = forms.TicketForm()
@@ -71,27 +72,42 @@ def create_own_review(request):
         "review_form": review_form,
     }
     return render(request, "website/create_review.html", context=context)
+"""
+
+
+@login_required
+def create_own_review(request):
+    review_form = forms.OwnReviewForm()
+    if request.method == "POST":
+        review_form = forms.OwnReviewForm(request.POST, request.FILES)
+        if review_form.is_valid():
+            review = review_form.save(commit=False)
+            review.user = request.user
+            review.save()
+            return redirect("home")
+    return render(
+        request, "website/create_review.html", context={"review_form": review_form}
+    )
 
 
 @login_required
 def follow_users(request):
     current_user = request.user
-    if request.method == "GET":
-        search_query = request.GET.get("search_box")
-        searched_user = User.objects.filter(username=search_query)
-        if request.method == "POST":
-            action = request.POST["follow"]
+    if request.method == "POST":
+        search_query = request.POST.get("search_box")
+        searched_user = User.objects.filter(username=search_query).values()
+        action = request.POST["follow"]
+        if searched_user:
             if action == "follow":
-                print("on est la")
-                current_user.following.add(searched_user)
-            elif action == "unfollow":
-                current_user.following.remove(searched_user)
-
-    return render(
-        request,
-        "website/followers.html",
-        {"search_query": search_query, "result": searched_user},
-    )
+                current_user.following.add(searched_user[0]["id"])
+        if action == "unfollow":
+            print("on est la")
+            print(current_user)
+            print(current_user.following.all())
+            current_user.following.remove()
+        context = {"searched_query": search_query, "searched_user": searched_user}
+        return render(request, "website/follower.html", context)
+    return render(request, "website/follower.html")
 
 
 @login_required
