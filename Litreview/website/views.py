@@ -78,9 +78,12 @@ def follow_users(request):
         if searched_user:
             if action == "follow":
                 current_user.following.add(searched_user[0]["id"])
-        if action == "unfollow":
-            for user in User.objects.filter().values():
+        else:
+            for user in current_user.following.all():
                 print(user)
+            if action == "unfollow":
+                current_user.following.remove()
+
         context = {"searched_query": search_query, "searched_user": searched_user}
         return render(request, "website/follower.html", context)
     return render(request, "website/follower.html")

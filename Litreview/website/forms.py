@@ -22,15 +22,6 @@ class ReviewForm(forms.ModelForm):
             self.fields["ticket"].disabled = True
 
 
-User = get_user_model()
-
-
-class FollowUsersForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ["following"]
-
-
 class OwnReviewForm(forms.ModelForm):
     class Meta:
         model = OwnReview
