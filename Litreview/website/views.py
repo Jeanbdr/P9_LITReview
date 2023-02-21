@@ -53,28 +53,6 @@ def create_review(request, pk):
     return render(request, "website/reviewing.html", context={"form": form})
 
 
-"""
-@login_required
-def create_own_review(request):
-    ticket_form = forms.TicketForm()
-    review_form = forms.ReviewForm()
-    if request.method == "POST":
-        ticket_form = forms.TicketForm(request.POST, request.FILES)
-        review_form = forms.ReviewForm(request.POST)
-        if all([ticket_form.is_valid(), review_form.is_valid()]):  # mettre un and
-            ticket = ticket_form.save(commit=False)
-            ticket.user = request.user
-            ticket.save()
-            review_form.save()
-            return redirect("home")
-    context = {
-        "ticket_form": ticket_form,
-        "review_form": review_form,
-    }
-    return render(request, "website/create_review.html", context=context)
-"""
-
-
 @login_required
 def create_own_review(request):
     review_form = forms.OwnReviewForm()
@@ -101,10 +79,8 @@ def follow_users(request):
             if action == "follow":
                 current_user.following.add(searched_user[0]["id"])
         if action == "unfollow":
-            print("on est la")
-            print(current_user)
-            print(current_user.following.all())
-            current_user.following.remove()
+            for user in User.objects.filter().values():
+                print(user)
         context = {"searched_query": search_query, "searched_user": searched_user}
         return render(request, "website/follower.html", context)
     return render(request, "website/follower.html")

@@ -8,7 +8,7 @@
         <button class="btn btn-outline-success" name="follow" value="follow" type="submit">S'abonner</button><br/><br/>
     
     <!-- PARTIE ABONNEMENT POUR SE DESABONNER -->
-        <strong>Abonnements</strong><br/>
+        <strong>Abonnements</strong><br/><br/>
         {% for following in user.following.all %}
             {{ following.username }}
             <button class="btn btn-outline-danger" name="follow" value="unfollow" type="submit">Se désabonner</button><br/><br/>
