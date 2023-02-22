@@ -15,8 +15,13 @@ def home(request):
         tickets_followed = models.Ticket.objects.filter(
             user__in=request.user.following.all()
         )
-        reviews = Review.objects.filter(user__in=request.user.following.all())
-        context = {"tickets": tickets_followed, "reviews": reviews}
+        reviews = Review.objects.filter(user=request.user)
+        reviews_followed = Review.objects.filter(user__in=request.user.following.all())
+        context = {
+            "tickets": tickets_followed,
+            "reviews": reviews,
+            "reviews_followed": reviews_followed,
+        }
         return render(request, "website/home.html", context=context)
 
 
