@@ -3,10 +3,17 @@
     <p><a href="{% url 'create_ticket' %}"> <button>Demander une critique</button></a></p>
     <p><a href="{% url 'create_review' %}"><button>Créer une critique</button></a></p>
     {% for ticket in tickets %}
-        <p>{{ ticket.user }} à demandé une critique</p>
-        <p>{{ ticket.title }}</p>
+        <p>{{ ticket.user }} à demandé une critique sur le livre {{ ticket.title }} </p>
         <p>{{ ticket.description }}</p>
         <img src="{{ ticket.image.url }}">
-        <a href=" http://127.0.0.1:8000/reviewing/{{ticket.id}}"><button>Créer une critique</button></a>
+        <a href="{% url 'reviewing' ticket.id %}"><button>Créer une critique</button></a>
+    {% endfor %}
+    {% for review in reviews %}
+        <p>Vous avez publié une critique</p>
+        <p><strong>{{ review.headline }} {{ review.rating }}</strong></p>
+        <p>{{ review.body }}</p> 
+        <p>Ticket par : {{ review.ticket.user }}</p>
+        <p> {{ review.ticket.title }}</p>
+        <p> <img src="{{ review.ticket.image.url }}"></p>
     {% endfor %}
 {% endblock content %}

@@ -1,5 +1,5 @@
 from django import forms
-from website.models import Ticket, Review, OwnReview
+from website.models import Ticket, Review
 from django.contrib.auth import get_user_model
 
 
@@ -24,5 +24,5 @@ class ReviewForm(forms.ModelForm):
 
 class OwnReviewForm(forms.ModelForm):
     class Meta:
-        model = OwnReview
-        fields = ["title", "description", "image", "rating", "headline", "body"]
+        model = Review
+        fields = ["rating", "headline", "body"]
