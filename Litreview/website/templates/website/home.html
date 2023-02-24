@@ -2,14 +2,23 @@
 {% block content %}
     <p><a href="{% url 'create_ticket' %}"> <button>Demander une critique</button></a></p>
     <p><a href="{% url 'create_review' %}"><button>Créer une critique</button></a></p>
-    {% for ticket in tickets %}
-        <p>Ticket par {{ ticket.user }}</p>
-        <p>{{ ticket.title }}</p>
-        <p> {{ ticket.description }}</p>
-        <img src="{{ ticket.image.url }}">
-        <p>{% for review in ticket.review_set.all %}</p>
-        {% empty %}
-        <a href="{% url 'reviewing' ticket.id %}"><button>Créer une critique</button></a>
-        {% endfor %}
+    {% for post in posts %}
+        {% if post.content_type == 'REVIEW' %}
+            <p> {{ post.user }} a publié une critique </p>
+            <p> {{ post.headline }} - {{ post.rating }} </p>
+            <p> {{ post.body }} </p>
+            <p> Ticket {{ post.ticket.user }} </p>
+            <p> {{ post.ticket.title }} </p>
+            <img src="{{ post.ticket.image.url }}">
+        {% elif post.content_type == "TICKET" %}
+            <p> {{ post.user }} a demandé une critique </p>
+            <p> {{ post.title }} </p>
+            <p> {{ post.description }} </p>
+            <img src="{{ post.image.url }}">
+            {% for review in post.review_set.all %}
+            {% empty %}
+            <a href="{% url 'reviewing' post.id %}"><button>Créer une critique</button></a>
+            {% endfor %}
+        {% endif %}
     {% endfor %}
 {% endblock %}

@@ -5,6 +5,8 @@ from django.db.models import Q
 from authentication.models import User
 from website.models import Ticket, Review
 from django.contrib import messages
+from itertools import chain
+from django.db.models import CharField, Value
 
 # Create your views here.
 
@@ -12,15 +14,27 @@ from django.contrib import messages
 @login_required
 def home(request):
     if request.user.is_authenticated:
-        tickets_followed = models.Ticket.objects.filter(
+        tickets = models.Ticket.objects.filter(
             user__in=request.user.following.all()
+        ).order_by("-time_created")
+        tickets = tickets.annotate(content_type=Value("TICKET", CharField()))
+
+        reviews = Review.objects.filter(
+            Q(user=request.user) | Q(user__in=request.user.following.all())
+        ).order_by("-time_created")
+        reviews = reviews.annotate(content_type=Value("REVIEW", CharField()))
+        posts = sorted(
+            chain(
+                tickets,
+                reviews,
+            ),
+            key=lambda post: post.time_created,
+            reverse=True,
         )
-        reviews = Review.objects.filter(user=request.user)
-        reviews_followed = Review.objects.filter(user__in=request.user.following.all())
         context = {
-            "tickets": tickets_followed,
-            "reviews": reviews,
-            "reviews_followed": reviews_followed,
+            # "tickets": tickets,
+            # "reviews": reviews,
+            "posts": posts,
         }
         return render(request, "website/home.html", context=context)
 
@@ -122,7 +136,7 @@ def update_ticket(request, pk):
             ticket.user = request.user
             # now we can save
             ticket.save()
-        return redirect("home")
+        return redirect("profile")
     return render(
         request,
         "website/update.html",
@@ -135,7 +149,7 @@ def delete_ticket(request, pk):
     item = Ticket.objects.get(id=pk)
     if request.method == "POST":
         item.delete()
-        return redirect("home")
+        return redirect("profile")
     return render(request, "website/delete.html", {"item": item})
 
 

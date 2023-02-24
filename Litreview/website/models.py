@@ -11,7 +11,7 @@ class Ticket(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True
     )
-    IMAGE_MAX_SIZE = (200, 287)
+    IMAGE_MAX_SIZE = (150, 193)
     time_created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):

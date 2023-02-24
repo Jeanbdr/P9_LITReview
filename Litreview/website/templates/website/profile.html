@@ -18,13 +18,5 @@
         <a href="{% url 'update_review' review.id %}"><button>Update</button></a>
         <a href="{% url 'delete_review' review.id %}"><button>Delete</button></a>
     {% endfor %}
-    {% for own_review in own_reviews %}
-    <p>{{ own_review.headline }}</p>
-    <p>Note : {{ own_review.rating }}</p>
-    <p>{{ own_review.body }}</p>
-    <p>Critique faite par : {{ own_review.user.username }} le {{ own_review.time_created }}</p>
-    <a href="{% url 'update_review' review.id %}"><button>Update</button></a>
-    <a href="{% url 'delete_review' review.id %}"><button>Delete</button></a>
-    {% endfor %}
 {% endif %}
 {% endblock content %}
