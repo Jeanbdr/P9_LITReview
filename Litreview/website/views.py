@@ -32,8 +32,6 @@ def home(request):
             reverse=True,
         )
         context = {
-            # "tickets": tickets,
-            # "reviews": reviews,
             "posts": posts,
         }
         return render(request, "website/home.html", context=context)
@@ -43,15 +41,23 @@ def home(request):
 def profile(request, pk):
     if request.user.is_authenticated:
         profile = User.objects.get(id=pk)
-        tickets = Ticket.objects.filter(user_id=pk)
-        reviews = Review.objects.filter(user_id=pk)
+        tickets = Ticket.objects.filter(user_id=pk).annotate(
+            content_type=Value("TICKET", CharField())
+        )
+        reviews = Review.objects.filter(user_id=pk).annotate(
+            content_type=Value("REVIEW", CharField())
+        )
+        posts = sorted(
+            chain(tickets, reviews), key=lambda post: post.time_created, reverse=True
+        )
         return render(
             request,
             "website/profile.html",
             context={
                 "profile": profile,
-                "tickets": tickets,
-                "reviews": reviews,
+                # "tickets": tickets,
+                # "reviews": reviews,
+                "posts": posts,
             },
         )
 
@@ -136,7 +142,7 @@ def update_ticket(request, pk):
             ticket.user = request.user
             # now we can save
             ticket.save()
-        return redirect("profile")
+        return redirect("home")
     return render(
         request,
         "website/update.html",

@@ -2,21 +2,24 @@
 {% block content %}
 {% if profile %}
     <h2> Profil</h2>
-    {% for ticket in tickets %}
-        <p>{{ ticket.user.username }}</p>
-        <p>{{ ticket.title }}</p>
-        <p>{{ ticket.description }}</p>
-        <img src="{{ ticket.image.url }}">
-        <a href="{% url 'update_ticket' ticket.id %}"><button>Update</button></a>
-        <a href="{% url 'delete_ticket' ticket.id %}"><button>Delete</button></a>
-    {% endfor %}
-    {% for review in reviews %}
-        <p>{{ review.headline }}</p>
-        <p>Note : {{ review.rating }}</p>
-        <p>{{ review.body }}</p>
-        <p>Critique faite par : {{ review.user.username }} le {{ review.time_created }}</p>
-        <a href="{% url 'update_review' review.id %}"><button>Update</button></a>
-        <a href="{% url 'delete_review' review.id %}"><button>Delete</button></a>
+    {% for post in posts %}
+        {% if post.content_type == "TICKET" %}
+            <p>Ticket - Vous</p>
+            <p>{{ post.title }}</p>
+            <p>{{ post.description }}</p>
+            <img src="{{ post.image.url }}">
+            <a href="{% url 'update_ticket' post.id %}"><button>Update</button></a>
+            <a href="{% url 'delete_ticket' post.id %}"><button>Delete</button></a>
+        {% elif post.content_type == "REVIEW" %}
+            <p>Vous avez publié une critique</p>
+            <p> {{ post.headline }} - {{ post.rating }} </p>
+            <p> {{ post.body }} </p>
+            <p>Ticket - Vous</p>
+            <p> {{ post.ticket.title }} </p>
+            <img src="{{ post.ticket.image.url }}">
+            <a href="{% url 'update_review' post.id %}"><button>Update</button></a>
+            <a href="{% url 'delete_review' post.id %}"><button>Delete</button></a>
+        {% endif %}
     {% endfor %}
 {% endif %}
 {% endblock content %}
