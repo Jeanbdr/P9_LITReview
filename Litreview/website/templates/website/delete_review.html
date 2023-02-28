@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2>Etes-vous sûr de vouloir supprimer l'élément suivant : {{ item }}</h2>
-    <a href="{% url 'profile' request.user.id %}"><button>Annuler</button></a>
+    <h3>Etes-vous sûr de vouloir supprimer l'élément suivant : {{ item }}</h3><br/>
+    <a href="{% url 'profile' request.user.id %}"><button class="btn btn-secondary">Annuler</button></a>
     <form method="post">
         {% csrf_token %}
-        <a href="{% url 'home'%}"><button>Confirmer</button></a>
+        <br/><a href="{% url 'home'%}"><button class="btn btn-primary">Confirmer</button></a>
     </form>
 {% endblock content %}

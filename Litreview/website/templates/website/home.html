@@ -1,18 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
-    <p><a href="{% url 'create_ticket' %}"> <button>Demander une critique</button></a></p>
-    <p><a href="{% url 'create_review' %}"><button>Créer une critique</button></a></p>
+    <div class="container">
+        <div class="text-center">
+            <a href="{% url 'create_ticket' %}"> <button class="btn btn-secondary">Demander une critique</button></a>
+            <a href="{% url 'create_review' %}"><button class="btn btn-secondary">Créer une critique</button></a>
+        </div>
+    </div><br/>
     {% for post in posts %}
         {% if post.content_type == 'REVIEW' %}
             <div class="col d-flex justify-content-center">
                 <div class="card" style="width: 30rem;">
                     <div class="card-body">
                         <p class="card-user"> {{ post.user }} a publié une critique <span style="float: right;">{{ post.time_created }}</span></p>
-                        <p class="card-text"> {{ post.headline }} - {{ post.rating }}</p>
-                        <p class="card-text"> {{ post.body }}</p>
-                        <p class="card-user"> Ticket {{ post.ticket.user }}</p>
-                        <p class="card-text"> {{ post.ticket.title }}</p>
-                        <img src="{{ post.ticket.image.url }}">
+                        <p class="card-text"> Titre : {{ post.headline }} - Note : {{ post.rating }} / 5</p>
+                        <p class="card-text"> Commentaire : {{ post.body }}</p>
+                        <div class="col d-flex justify-content-center">
+                            <div class="card" style="width: 30rem;">
+                                <div class="card-body">
+                                    <p class="card-user"> Ticket {{ post.ticket.user }}</p>
+                                    <p class="card-text"> {{ post.ticket.title }}</p>
+                                    <img src="{{ post.ticket.image.url }}">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

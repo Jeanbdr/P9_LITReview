@@ -1,10 +1,41 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2> Créer un ticket </h2>
+    <h2> Créer une critique </h2>
     <form method="post" enctype="multipart/form-data">
-        {{ ticket_form.as_p }}
-        {{ review_form.as_p }}
+        <div class="col d-flex justify-content-center">
+            <div class="card" style="width: 30rem;">
+                <div class="card-body">
+                    <p>Livre / Article </p>
+                    {{ ticket_form.as_p }}
+                </div>
+            </div>
+        </div>
+        <div class="col d-flex justify-content-center">
+            <div class="card" style="width: 30rem;">
+                <div class="card-body">
+                    <p>Titre de la critique : {{ review_form.headline }}</p>
+                    <div>
+                        <p>Note :</p>
+                        <input type="radio" name="rating" id="rating0" value="0">
+                        <label for="rating0">- 0</label>
+                        <input type="radio" name="rating" id="rating1" value="1">
+                        <label for="rating1">- 1</label>
+                        <input type="radio" name="rating" id="rating2" value="2">
+                        <label for="rating2">- 2</label>
+                        <input type="radio" name="rating" id="rating3" value="3">
+                        <label for="rating3">- 3</label>
+                        <input type="radio" name="rating" id="rating4" value="4">
+                        <label for="rating4">- 4</label>
+                        <input type="radio" name="rating" id="rating5" value="5">
+                        <label for="rating5">- 5</label>
+                    </div>
+                    <p>Commentaire :</p>
+                    <textarea class="form-control" rows="4" name="body"></textarea>
+                    <br/><button type="submit" class="btn btn-primary">Envoyer</button>
+                </div>
+            </div>
+        </div>
         {% csrf_token %}
-        <button type="submit"> Envoyer</button>
+        
     </form>
 {% endblock content %}

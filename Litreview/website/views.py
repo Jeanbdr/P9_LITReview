@@ -1,12 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from . import forms, models
-from django.db.models import Q
+from django.db.models import Q, CharField, Value
 from authentication.models import User
 from website.models import Ticket, Review
-from django.contrib import messages
 from itertools import chain
-from django.db.models import CharField, Value
 
 # Create your views here.
 
@@ -55,8 +53,6 @@ def profile(request, pk):
             "website/profile.html",
             context={
                 "profile": profile,
-                # "tickets": tickets,
-                # "reviews": reviews,
                 "posts": posts,
             },
         )
@@ -80,6 +76,7 @@ def create_review(request, pk):
     if Review.objects.filter(ticket_id=pk).exists():
         return redirect("home")
     form = forms.ReviewForm(ticket_id=pk)
+    tickets = Ticket.objects.filter(id=pk)
     if request.method == "POST":
         form = forms.ReviewForm(request.POST, ticket_id=pk)
         if form.is_valid():
@@ -87,7 +84,9 @@ def create_review(request, pk):
             review.user = request.user
             review.save()
             return redirect("home")
-    return render(request, "website/reviewing.html", context={"form": form})
+    return render(
+        request, "website/reviewing.html", context={"form": form, "tickets": tickets}
+    )
 
 
 @login_required
@@ -155,7 +154,7 @@ def delete_ticket(request, pk):
     item = Ticket.objects.get(id=pk)
     if request.method == "POST":
         item.delete()
-        return redirect("profile")
+        return redirect("home")
     return render(request, "website/delete.html", {"item": item})
 
 
@@ -163,15 +162,18 @@ def delete_ticket(request, pk):
 def update_review(request, pk):
     review = Review.objects.get(id=pk)
     form = forms.ReviewForm(instance=review)
+    tickets = Review.objects.filter(id=pk)
     if request.method == "POST":
-        form = forms.ReviewForm(request.POST, instance=review)
+        form = forms.ReviewForm(request.POST, request.FILES, instance=review)
         if form.is_valid():
-            form.save()
+            review = form.save(commit=False)
+            review.user = request.user
+            review.save()
         return redirect("home")
     return render(
         request,
         "website/update_review.html",
-        context={"form": form},
+        context={"form": form, "tickets": tickets},
     )
 
 
