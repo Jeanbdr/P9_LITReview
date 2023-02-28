@@ -1,27 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
 <h2> Modifier une critique </h2>
-{% for ticket in tickets %}
-<div class="col d-flex justify-content-center">
-    <div class="card" style="width: 30rem;">
-        <div class="card-body">
-            <p class="card-user"> {{ ticket.ticket.user }} postée le : {{ ticket.time_created }}</span></p>
-            <p class="card-text"> Titre : {{ ticket.ticket.title }}</p>
-            <p class="card-text"> Description : {{ ticket.ticket.description }}</p>
-            <img src="{{ ticket.ticket.image.url }}">
+<form method="post">
+    {% for ticket in tickets %}
+    <div class="col d-flex justify-content-center">
+        <div class="card" style="width: 30rem;">
+            <div class="card-body">
+                <p class="card-user"> {{ ticket.ticket.user }} postée le : {{ ticket.time_created }}</span></p>
+                <p class="card-text"> Titre : {{ ticket.ticket.title }}</p>
+                <p class="card-text"> Description : {{ ticket.ticket.description }}</p>
+                <img src="{{ ticket.ticket.image.url }}">
+            </div>
         </div>
     </div>
-</div>
-{% endfor %}
-<div class="col d-flex justify-content-center">
-    <div class="card" style="width: 30rem;">
-        <div class="card-body">
-            <form method="post">
-                {{form.as_p}}
-                <button type="submit" class="btn btn-primary"> Envoyer</button>
+    {% endfor %}
+    <div class="col d-flex justify-content-center">
+        <div class="card" style="width: 30rem;">
+            <div class="card-body">
+                {{form.ticket.as_hidden}}
+                <p> Titre : {{ form.headline }}</p>
+                <p>Note : {{form.rating }}</p>
+                <p>Commentaire :</p>
+                <textarea class="form-control" rows="4" name="body">{{ form.body.value }}</textarea>
                 {% csrf_token %}
-            </form>
+                <br/><button type="submit" class="btn btn-primary">Envoyer</button>
+            </div>
         </div>
     </div>
-</div>
+</form>
 {% endblock content %}
