@@ -37,6 +37,14 @@ des critiques de livres.
     - Installer les packages nécessaires :
 
         pip install -r requirements.txt
+
+    - Déaplcer vous dans le dossier Litreview :
+
+        cd Litreview
+
+    - Réaliser les migrations :
+
+        python manage.py migrate
     
     - Lancer le serveur depuis la console :
 
