@@ -12,14 +12,20 @@ from itertools import chain
 @login_required
 def home(request):
     if request.user.is_authenticated:
-        tickets = models.Ticket.objects.filter(
-            user__in=request.user.following.all()
-        ).order_by("-time_created")
+        tickets = (
+            models.Ticket.objects.filter(user__in=request.user.following.all())
+            .select_related("user")
+            .order_by("-time_created")
+        )
         tickets = tickets.annotate(content_type=Value("TICKET", CharField()))
 
-        reviews = Review.objects.filter(
-            Q(user=request.user) | Q(user__in=request.user.following.all())
-        ).order_by("-time_created")
+        reviews = (
+            Review.objects.filter(
+                Q(user=request.user) | Q(user__in=request.user.following.all())
+            )
+            .select_related("ticket", "ticket__user")
+            .order_by("-time_created")
+        )
         reviews = reviews.annotate(content_type=Value("REVIEW", CharField()))
         posts = sorted(
             chain(
